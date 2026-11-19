@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#252a32" />
+  <title>BatteryGuard_AI · Salud de batería</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/Style/style.css" />
+  <script type="module" src="/Script/dashboard.js"></script>
+</head>
+<body>
+  <div class="app-shell min-h-screen">
+    <aside class="sidebar">
+      <a class="brand flex items-center gap-3" href="#datos" aria-label="BatteryGuard_AI, inicio">
+        <span class="brand-mark">ϟ</span>
+        <span>BatteryGuard_AI<small>Salud de batería</small></span>
+      </a>
+
+      <nav class="main-nav" aria-label="Secciones del dashboard">
+        <button class="nav-link is-active w-full" type="button" data-view="datos" aria-current="page">
+          <span class="nav-number">01</span><span><b>Datos y hábitos</b><small>Vehículo, batería y uso diario</small></span>
+        </button>
+        <button class="nav-link w-full" type="button" data-view="diagnostico">
+          <span class="nav-number">02</span><span><b>Diagnóstico técnico</b><small>Lecturas del BMS (taller)</small></span>
+        </button>
+        <button class="nav-link w-full" type="button" data-view="resultado">
+          <span class="nav-number">03</span><span><b>Resultado del análisis</b><small>Estado y recomendaciones</small></span>
+        </button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <span class="status-indicator"></span>
+        <p>Prototipo de interfaz<br />Los resultados son estimaciones de demostración y no sustituyen un diagnóstico profesional.</p>
+      </div>
+    </aside>
+
+    <main class="main-content min-w-0">
+      <div class="mobile-brand"><span class="brand-mark">ϟ</span><b>BatteryGuard_AI</b></div>
+
+      <!-- VISTA 1: DATOS DEL VEHÍCULO -->
+      <section class="view is-visible" id="view-datos" aria-labelledby="title-datos">
+        <header class="page-header">
+          <div><span class="eyebrow">INFORMACIÓN DEL VEHÍCULO</span><h1 id="title-datos">Cuéntanos sobre tu vehículo</h1><p>Con estos datos básicos estimamos cuánto desgaste esperar. Los encuentras en el manual, el tablero o la app del auto.</p></div>
+          <span class="step-pill"><i></i> Paso 1 de 3</span>
+        </header>
+
+        <form id="vehicle-form">
+          <article class="panel">
+            <div class="panel-heading"><div><h2>Vehículo</h2><p>La edad y el tipo de uso definen el desgaste esperado.</p></div><span class="panel-icon">01</span></div>
+            <div class="form-grid">
+              <div class="field"><label for="marca">Marca</label><select id="marca" name="marca"><option>Ford</option><option>GM</option><option>Honda</option><option selected>Hyundai</option></select></div>
+              <div class="field"><label for="modelo">Modelo</label><select id="modelo" name="modelo"><optgroup label="Ford"><option>Mustang Mach-E</option><option>F-150 Lightning</option><option>E-Transit</option></optgroup><optgroup label="GM"><option>Chevrolet Bolt</option><option>Equinox EV</option><option>Cadillac Lyriq</option></optgroup><optgroup label="Honda"><option>Prologue</option><option>Honda e</option></optgroup><optgroup label="Hyundai"><option selected>Ioniq 5</option><option>Ioniq 6</option><option>Kona Electric</option></optgroup></select><small>Agrupados por marca.</small></div>
+              <div class="field"><label for="anio">Año de fabricación</label><input id="anio" name="anio" type="number" min="2015" max="2026" value="2021" required /><small>Introduce el año del vehículo.</small></div>
+              <div class="field"><label for="odo">Kilometraje total</label><div class="input-unit"><input id="odo" data-col="odometer_km" name="odo" type="number" min="0" max="1000000" value="68500" required /><span>km</span></div><small>Lectura del tablero del auto.</small></div>
+              <fieldset class="field field-reset"><legend>Tipo de uso</legend><div class="segmented"><label><input type="radio" name="uso" value="particular" checked /><span>Particular</span></label><label><input type="radio" name="uso" value="flotilla" /><span>Flotilla</span></label></div><small>Indica cómo se utiliza el vehículo.</small></fieldset>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading"><div><h2>Batería</h2><p>Elige la química de las celdas. Si no la conoces, consulta la ficha técnica.</p></div><span class="panel-icon">02</span></div>
+            <fieldset class="field-reset"><legend class="sr-only">Química de la batería</legend><div class="chem-grid">
+              <label class="chem-option"><input type="radio" name="quim" value="NMC" checked /><span class="chem-code">NMC</span><small>Níquel, manganeso y cobalto</small></label>
+              <label class="chem-option"><input type="radio" name="quim" value="NCA" /><span class="chem-code">NCA</span><small>Níquel, cobalto y aluminio</small></label>
+              <label class="chem-option"><input type="radio" name="quim" value="LMO" /><span class="chem-code">LMO</span><small>Litio y óxido de manganeso</small></label>
+              <label class="chem-option"><input type="radio" name="quim" value="LTO" /><span class="chem-code">LTO</span><small>Litio y titanato</small></label>
+              <label class="chem-option"><input type="radio" name="quim" value="LFP" /><span class="chem-code">LFP</span><small>Litio, hierro y fosfato</small></label>
+              <label class="chem-option"><input type="radio" name="quim" value="Desconocida" /><span class="chem-code">No sé</span><small>Química no identificada</small></label>
+            </div></fieldset>
+            <div class="form-grid compact-grid"><div class="field"><label for="cap">Capacidad de diseño</label><div class="input-unit"><input id="cap" data-col="battery_capacity_kwh" name="cap" type="number" min="1" max="250" value="77" required /><span>kWh</span></div><small>Capacidad nominal indicada por el fabricante.</small></div></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading"><div><h2>Hábitos de carga y conducción</h2><p>Una estimación aproximada es suficiente.</p></div><span class="panel-icon">03</span></div>
+            <div class="form-grid">
+              <div class="field"><label for="fast-charge">Uso de carga rápida</label><div class="range-row"><input id="fast-charge" name="fastCharge" type="range" min="0" max="100" value="25" /><output id="fast-charge-output" for="fast-charge">25%</output></div><small>Porcentaje aproximado de sesiones en carga rápida.</small></div>
+              <div class="field"><label for="dist">Distancia diaria promedio</label><div class="input-unit"><input id="dist" data-col="daily_distance" name="dist" type="number" min="0" max="1000" value="42" /><span>km</span></div></div>
+              <div class="field"><label for="ciclos">Cargas el último mes</label><input id="ciclos" data-col="charging_cycles_last_month" name="ciclos" type="number" min="0" max="100" value="18" /><small>Cuenta cada vez que conectas el vehículo.</small></div>
+            </div>
+          </article>
+          <div class="form-actions"><button class="button button-quiet" type="reset" id="reset-vehicle">Restablecer datos</button><button class="button button-primary" type="button" data-go="diagnostico">Continuar al diagnóstico <span>→</span></button></div>
+        </form>
+      </section>
+
+      <!-- VISTA 2: CAPTURA DE DATOS TÉCNICOS -->
+      <section class="view" id="view-diagnostico" aria-labelledby="title-diagnostico" hidden>
+        <header class="page-header">
+          <div><span class="eyebrow">INSPECCIÓN DE BATERÍA</span><h1 id="title-diagnostico">Diagnóstico técnico</h1><p>Registra únicamente las lecturas y los eventos que el escáner o el historial del BMS puedan proporcionar. Los campos no disponibles pueden dejarse vacíos.</p></div>
+          <span class="step-pill"><i></i> Paso 2 de 3</span>
+        </header>
+
+        <form id="bms-form" novalidate>
+          <article class="panel">
+            <div class="panel-heading"><div><h2>Estado reportado por el BMS</h2><p>Datos registrados por el sistema de gestión; no son cálculos propios de VoltCheck.</p></div><span class="panel-icon">01</span></div>
+            <div class="form-grid">
+              <div class="field"><label for="soh">SOH reportado</label><div class="input-unit"><input id="soh" data-col="battery_health_percent" name="soh" type="number" min="0" max="100" step="0.1" placeholder="No disponible" /><span>%</span></div><small>Salud que informa el BMS. Se mostrará como lectura de origen.</small></div>
+              <div class="field"><label for="soc">Estado de carga (SOC)</label><div class="input-unit"><input id="soc" data-col="state_of_charge" name="soc" type="number" min="0" max="100" step="0.1" placeholder="No disponible" /><span>%</span></div><small>Contexto de carga al momento de obtener la lectura.</small></div>
+              <div class="field"><label for="cyc">Ciclos acumulados</label><input id="cyc" data-col="cycle_count" name="cyc" type="number" min="0" step="1" placeholder="No disponible" /><small>Conteo reportado por el BMS.</small></div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading"><div><h2>Mediciones eléctricas</h2><p>Introduce valores del paquete o del conjunto de celdas, respetando la unidad que entrega el equipo.</p></div><span class="panel-icon">02</span></div>
+            <div class="form-grid">
+              <div class="field"><label for="pv">Voltaje del paquete</label><div class="input-unit"><input id="pv" data-col="pack_voltage" name="pv" type="number" min="0" step="0.1" placeholder="No disponible" /><span>V</span></div></div>
+              <div class="field"><label for="cv">Voltaje promedio por celda</label><div class="input-unit"><input id="cv" data-col="cell_voltage_avg" name="cv" type="number" min="0" step="0.001" placeholder="No disponible" /><span>V</span></div></div>
+              <div class="field"><label for="ir">Resistencia interna</label><div class="input-unit"><input id="ir" data-col="internal_resistance" name="ir" type="number" min="0" step="0.1" placeholder="No disponible" /><span>mΩ</span></div><small>Confirma si el escáner reporta celda, módulo o paquete.</small></div>
+              <div class="field"><label for="vi">Desbalance de voltaje entre celdas</label><div class="input-unit"><input id="vi" data-col="voltage_imbalance" name="vi" type="number" min="0" step="0.01" placeholder="No disponible" /><span>mV*</span></div><small>*Verifica la unidad del fabricante/equipo antes de cargar el dato.</small></div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading"><div><h2>Indicadores térmicos y de desempeño</h2><p>Los usa el modelo de IA. El riesgo de fuga térmica es obligatorio para que el modelo pueda responder.</p></div><span class="panel-icon">IA</span></div>
+            <div class="form-grid">
+              <div class="field"><label for="thermal-risk">Riesgo de fuga térmica</label><div class="input-unit"><input id="thermal-risk" data-col="thermal_runaway_risk" name="thermalRisk" type="number" min="0" max="100" step="0.1" placeholder="No disponible" /><span>0–100</span></div><small>Índice calculado por el sistema de la batería.</small></div>
+              <div class="field"><label for="cell-temp-max">Temperatura máxima de celda</label><div class="input-unit"><input id="cell-temp-max" data-col="cell_temperature_max" name="cellTempMax" type="number" step="0.1" placeholder="No disponible" /><span>°C</span></div></div>
+              <div class="field"><label for="discharge-eff">Eficiencia de descarga</label><div class="input-unit"><input id="discharge-eff" data-col="discharge_efficiency" name="dischargeEff" type="number" min="0" max="100" step="0.1" placeholder="No disponible" /><span>%</span></div></div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading"><div><h2>Eventos y mantenimiento</h2><p>Registros históricos o contadores de fallas, no condiciones instantáneas.</p></div><span class="panel-icon">03</span></div>
+            <div class="form-grid">
+              <div class="field"><label for="wc">Advertencias registradas por el BMS</label><input id="wc" data-col="BMS_warning_count" name="wc" type="number" min="0" step="1" placeholder="No disponible" /><small>Conteo de advertencias. Si es posible, conserva también sus códigos.</small></div>
+              <div class="field"><label for="faults">Fallos previos registrados</label><input id="faults" data-col="previous_faults" name="faults" type="number" min="0" step="1" placeholder="No disponible" /></div>
+              <div class="field"><label for="sensor-faults">Fallos de sensores</label><input id="sensor-faults" data-col="sensor_fault_count" name="sensorFaults" type="number" min="0" step="1" placeholder="No disponible" /></div>
+              <div class="field"><label for="voltage-events">Eventos de voltaje anómalo</label><input id="voltage-events" data-col="abnormal_voltage_events" name="voltageEvents" type="number" min="0" step="1" placeholder="No disponible" /></div>
+              <div class="field"><label for="ls">Días desde el último mantenimiento</label><div class="input-unit"><input id="ls" data-col="last_service_days" name="ls" type="number" min="0" step="1" placeholder="No disponible" /><span>días</span></div></div>
+            </div>
+            <div class="notice" id="bms-notice" role="status">Los campos son opcionales. No introduzcas ceros para representar datos desconocidos.</div>
+          </article>
+
+          <div class="form-actions"><button class="button button-quiet" type="button" data-go="datos">← Volver a datos</button><button class="button button-primary" type="button" id="analyze-button">Generar informe <span>→</span></button></div>
+        </form>
+      </section>
+
+      <!-- VISTA 3: RESULTADO -->
+      <section class="view" id="view-resultado" aria-labelledby="title-resultado" hidden>
+        <header class="page-header"><div><span class="eyebrow">INFORME DE ESTADO</span><h1 id="title-resultado">Resultado del análisis</h1><p>Interpretación de las lecturas disponibles. Los datos reportados por el BMS se distinguen de los valores calculados.</p></div><span class="step-pill"><i></i> Paso 3 de 3</span></header>
+        <div class="result-layout">
+          <div class="result-main">
+            <article class="panel"><div class="panel-heading"><div><h2>Vehículo inspeccionado</h2><p>Contexto procedente de la primera pestaña.</p></div></div><div class="result-metrics result-context"><div><span>Vehículo</span><b id="result-vehicle">—</b></div><div><span>Año</span><b id="result-vehicle-year">—</b></div><div><span>Kilometraje</span><b id="result-odometer">—</b></div><div><span>Química declarada</span><b id="result-chemistry">—</b></div></div></article>
+            <article class="panel health-panel">
+              <div class="health-top"><div><span class="eyebrow">ESTADO DE SALUD REPORTADO</span><div class="health-value"><strong id="result-soh">—</strong><span id="soh-origin">SOH informado por el BMS</span></div></div><div class="battery-visual" id="battery-visual" aria-label="Representación del SOH reportado"><div class="battery-cells"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div>
+              <div class="health-track"><i id="health-track-fill" style="width:0%"></i></div>
+              <div class="result-status" id="result-status"><span class="status-dot"></span><div><b>Informe pendiente</b><small>Completa las lecturas técnicas para generar una interpretación.</small></div></div>
+            </article>
+            <article class="panel"><div class="panel-heading"><div><h2>Indicadores derivados y lecturas</h2><p>Se muestran solo los valores disponibles; no se sustituyen datos faltantes por ceros.</p></div></div><div class="result-metrics">
+              <div><span>Capacidad nominal</span><b id="result-capacity-design">—</b></div>
+              <div><span>Capacidad teórica según SOH reportado</span><b id="result-capacity-estimated">—</b></div>
+              <div><span>Estado de carga (SOC)</span><b id="result-soc">—</b></div>
+              <div><span>Ciclos acumulados</span><b id="result-cycles">—</b></div>
+              <div><span>Voltaje del paquete</span><b id="result-voltage">—</b></div>
+              <div><span>Voltaje promedio por celda</span><b id="result-cell-voltage">—</b></div>
+              <div><span>Resistencia interna reportada</span><b id="result-resistance">—</b></div>
+              <div><span>Desbalance entre celdas</span><b id="result-imbalance">—</b></div>
+            </div></article>
+            <article class="panel"><div class="panel-heading"><div><h2>Eventos considerados</h2><p>Registros que justifican la interpretación.</p></div></div><ul class="reason-list" id="reason-list"><li>Aún no se ha generado el informe.</li></ul></article>
+          </div>
+          <aside class="result-aside">
+            <article class="life-card" id="life-card" hidden>
+              <span>Cargas restantes estimadas (IA)</span><strong id="life-cycles">—</strong><small>ciclos de carga</small>
+              <div class="life-progress"><i id="life-fill" style="width:0%"></i></div>
+              <p id="life-note"></p>
+            </article>
+            <article class="panel recommendation-panel"><h2>Recomendación</h2><p id="recommendation-text">Completa el diagnóstico para obtener una interpretación.</p><button class="button button-primary button-full" type="button" data-go="diagnostico">Revisar lecturas</button></article>
+            <p class="disclaimer" id="model-note"></p>
+            <p class="disclaimer">El SOH y los contadores mostrados son lecturas de origen. La capacidad teórica se calcula multiplicando la capacidad nominal por el SOH reportado; no equivale a una prueba física de capacidad. Los umbrales del prototipo son orientativos y requieren validación por química, fabricante y protocolo de ensayo.</p>
+          </aside>
+        </div>
+        <div class="form-actions"><button class="button button-quiet" type="button" data-go="diagnostico">← Volver al diagnóstico</button><button class="button button-primary" type="button" id="recalculate-button">Actualizar informe ↻</button></div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
