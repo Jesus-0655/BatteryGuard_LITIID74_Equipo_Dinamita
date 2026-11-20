@@ -1,3 +1,10 @@
+# BatteryGuard_AI - Clonación de Repositorio
+## 1. 
+```bash
+git clone https://github.com/Jesus-0655/BatteryGuard_LITIID74_Equipo_Dinamita.git
+```
+
+
 # BatteryGuard_AI — Dashboard + modelo integrados
 
 ```
